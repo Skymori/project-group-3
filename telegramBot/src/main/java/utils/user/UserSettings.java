@@ -6,20 +6,32 @@ import api.bank.CurrencyNames;
 import java.util.List;
 
 public class UserSettings {
+
+
+    private long chatId;
     private String name;
     private List<Banks> bankList;
     private List<CurrencyNames> currencies;
-    private int roundAccuracy;
+    private int numberAfterDot;
     private int notifyHour;
 
-    public UserSettings(String name, List<Banks> bankList, List<CurrencyNames> currencies, int roundAccuracy, int notifyHour) {
+
+
+    public UserSettings(long chatId, String name, List<Banks> bankList, List<CurrencyNames> currencies, int numberAfterDot, int notifyHour) {
+        this.chatId = chatId;
         this.name = name;
         this.bankList = bankList;
         this.currencies = currencies;
-        this.roundAccuracy = roundAccuracy;
+        this.numberAfterDot = numberAfterDot;
         this.notifyHour = notifyHour;
     }
+    public long getChatId() {
+        return chatId;
+    }
 
+    public void setChatId(long chatId) {
+        this.chatId = chatId;
+    }
     public String getName() {
         return name;
     }
@@ -44,12 +56,12 @@ public class UserSettings {
         this.currencies = currencies;
     }
 
-    public int getRoundAccuracy() {
-        return roundAccuracy;
+    public int getNumberAfterDot() {
+        return numberAfterDot;
     }
 
-    public void setRoundAccuracy(int roundAccuracy) {
-        this.roundAccuracy = roundAccuracy;
+    public void setNumberAfterDot(int numberAfterDot) {
+        this.numberAfterDot = numberAfterDot;
     }
 
     public int getNotifyHour() {

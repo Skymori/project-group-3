@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import utils.selectSettings.SelectBanks;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -104,6 +105,7 @@ public class InlineKeyboardMarkupMy extends TelegramImplementations {
 
     public void menuBanks(String chatUserId) {
         try {
+            SelectBanks selectBanks = new SelectBanks();
             List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
             buttons.add(Collections.singletonList((InlineKeyboardButton.builder()
                     .text("Приват банк")
