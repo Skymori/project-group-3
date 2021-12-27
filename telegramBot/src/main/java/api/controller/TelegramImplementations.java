@@ -12,7 +12,7 @@ import java.util.Properties;
 
 
 public class TelegramImplementations extends TelegramLongPollingBot {
-
+        private final ButtonConteiner buttonConteiner;
         String rootPath = Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("application.properties")).getPath();
         Properties appProps=new Properties();
     public String getName(String a)  {
@@ -36,43 +36,46 @@ public class TelegramImplementations extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        if (update.hasCallbackQuery()) {
-            pressingTheButton(update);
-
-        } else if (update.hasMessage()) {
-            messageHandler(update);
+        String buttonIndent;
+        Long chatId;
+        if (update.hasMessage()){
+            buttonIndent = update.getMessage().getText().trim();
+            chatId = update.getMessage().getChatId();
+            but
         }
     }
 
 
-    private void messageHandler(Update update) {
-        InlineKeyboardMarkupMy inlineKeyboardMarkupMy = new InlineKeyboardMarkupMy();
-        if (update.getMessage().hasText()) {
 
-            String text = update.getMessage().getText();
-            String chatUserId = update.getMessage().getChatId().toString();
-
-            if (text.equals("/start")) {
-                inlineKeyboardMarkupMy.mainMenu(chatUserId);
-            }
-        }
-    }
-
-    private void pressingTheButton(Update update) {
-        InlineKeyboardMarkupMy inlineKeyboardMarkupMy = new InlineKeyboardMarkupMy();
-        String data = update.getCallbackQuery().getData();
-        String chatUserId = update.getCallbackQuery().getMessage().getChatId().toString();
-        switch (data) {
-            case "Settings" -> inlineKeyboardMarkupMy.menuSettings(chatUserId);
-            case "Back" -> inlineKeyboardMarkupMy.mainMenu(chatUserId);
-            case "Number" -> inlineKeyboardMarkupMy.menuNumber(chatUserId);
-            case "BackNum" -> inlineKeyboardMarkupMy.menuSettings(chatUserId);
-            case "Bank" -> inlineKeyboardMarkupMy.menuBanks(chatUserId);
-            case "BackB" -> inlineKeyboardMarkupMy.menuSettings(chatUserId);
-            case "currencies" -> inlineKeyboardMarkupMy.menuCurrency(chatUserId);
-            case "BackVal" -> inlineKeyboardMarkupMy.menuSettings(chatUserId);
-        }
-    }
+//
+//    private void messageHandler(Update update) {
+//        InlineKeyboardMarkupMy inlineKeyboardMarkupMy = new InlineKeyboardMarkupMy();
+//        if (update.getMessage().hasText()) {
+//
+//            String text = update.getMessage().getText();
+//            String chatUserId = update.getMessage().getChatId().toString();
+//
+//            if (text.equals("/start")) {
+//                inlineKeyboardMarkupMy.mainMenu(chatUserId);
+//            }
+//        }
+//    }
+//
+//    private void pressingTheButton(Update update) {
+//        InlineKeyboardMarkupMy inlineKeyboardMarkupMy = new InlineKeyboardMarkupMy();
+//        String data = update.getCallbackQuery().getData();
+//        String chatUserId = update.getCallbackQuery().getMessage().getChatId().toString();
+//        switch (data) {
+//            case "Settings" -> inlineKeyboardMarkupMy.menuSettings(chatUserId);
+//            case "Back" -> inlineKeyboardMarkupMy.mainMenu(chatUserId);
+//            case "Number" -> inlineKeyboardMarkupMy.menuNumber(chatUserId);
+//            case "BackNum" -> inlineKeyboardMarkupMy.menuSettings(chatUserId);
+//            case "Bank" -> inlineKeyboardMarkupMy.menuBanks(chatUserId);
+//            case "BackB" -> inlineKeyboardMarkupMy.menuSettings(chatUserId);
+//            case "currencies" -> inlineKeyboardMarkupMy.menuCurrency(chatUserId);
+//            case "BackVal" -> inlineKeyboardMarkupMy.menuSettings(chatUserId);
+//        }
+//    }
 
 
 }

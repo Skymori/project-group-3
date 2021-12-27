@@ -1,7 +1,7 @@
 package utils.user;
 
-import api.bank.Banks;
-import api.bank.CurrencyNames;
+import utils.buttonEnum.BanksNameButtons;
+import utils.buttonEnum.CurrencyNamesButtons;
 
 import java.util.List;
 
@@ -10,14 +10,14 @@ public class UserSettings {
 
     private long chatId;
     private String name;
-    private List<Banks> bankList;
-    private List<CurrencyNames> currencies;
+    private List<BanksNameButtons> bankList;
+    private List<CurrencyNamesButtons> currencies;
     private int numberAfterDot;
     private int notifyHour;
 
 
 
-    public UserSettings(long chatId, String name, List<Banks> bankList, List<CurrencyNames> currencies, int numberAfterDot, int notifyHour) {
+    public UserSettings(long chatId, String name, List<BanksNameButtons> bankList, List<CurrencyNamesButtons> currencies, int numberAfterDot, int notifyHour) {
         this.chatId = chatId;
         this.name = name;
         this.bankList = bankList;
@@ -40,19 +40,19 @@ public class UserSettings {
         this.name = name;
     }
 
-    public List<Banks> getBankList() {
+    public List<BanksNameButtons> getBankList() {
         return bankList;
     }
 
-    public void setBankList(List<Banks> bankList) {
+    public void setBankList(List<BanksNameButtons> bankList) {
         this.bankList = bankList;
     }
 
-    public List<CurrencyNames> getCurrencies() {
+    public List<CurrencyNamesButtons> getCurrencies() {
         return currencies;
     }
 
-    public void setCurrencies(List<CurrencyNames> currencies) {
+    public void setCurrencies(List<CurrencyNamesButtons> currencies) {
         this.currencies = currencies;
     }
 
