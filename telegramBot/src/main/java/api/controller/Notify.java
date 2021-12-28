@@ -38,6 +38,40 @@ public class Notify extends DefaultAbsSender {
 
     class MyTimerTask extends TimerTask {
 
+
+        public String sendInfo(UserSettings userSettings) throws IOException, InterruptedException {
+            Facade facade = new Facade();
+
+            final HashSet<Banks> bankList = userSettings.getBankList();
+            System.out.println(bankList.toString());
+
+            final HashSet<CurrencyNames> currencies = userSettings.getCurrencies();
+            System.out.println(currencies.toString());
+
+
+            StringBuilder result = new StringBuilder();
+
+            for (Banks banks : bankList) {
+                List<BankResponce> bankInfo = facade.getBankInfo(banks.getName());
+                result.append("Курс в: " + banks.getCommand() + "\n");
+
+                for (CurrencyNames currency : currencies) {
+                    List<BankResponce> collect = bankInfo.stream()
+                            .filter(cur -> currency.getCommand().equals(cur.getCurrency()))
+                            .collect(Collectors.toList());
+
+
+                    for (BankResponce responce : collect) {
+                        result.append(responce.getCurrency() + " Покупка: " + responce.getBuy() + " Продажа:" + responce.getSale() + "\n");
+                    }
+                    System.out.println(collect);
+                }
+
+            }
+
+            return result.toString();
+        }
+
 //        String toPost (String message);{
 //            Cha
 //        }
@@ -49,7 +83,20 @@ public class Notify extends DefaultAbsSender {
             UserService userService = new UserService();
             userMap= userService.getUserMap();
             System.out.println(userMap.toString());
+/////////////////////////
 
+            try {
+                execute(SendMessage.builder()
+                        .text(userService.sendInfo(userService.getUserSettings(userId)))
+                        .chatId(userId.toString())
+                        .build());
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            ///////////////////////
 
             System.out.println("timer2");
 
