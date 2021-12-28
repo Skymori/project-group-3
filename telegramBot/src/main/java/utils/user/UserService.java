@@ -18,6 +18,10 @@ public class UserService {
     private static File file = new File(USERDATA_FILE_NAME);
     private static UserService serviceInstance;
 
+    public ConcurrentMap<Long, UserSettings> getUserMap() {
+        return userMap;
+    }
+
     public UserService() {
         userMap = new ConcurrentHashMap<>();
         readUsersFromFile();

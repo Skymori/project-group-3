@@ -1,4 +1,6 @@
+import api.controller.Notify;
 import api.controller.TelegramImplementations;
+import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
@@ -14,4 +16,12 @@ public class Main {
             e.getStackTrace();
         }
 //        sfgdfhgh
+
+        Notify everyTwoHours = new Notify(new DefaultBotOptions());
+        everyTwoHours.startTimer();
+
+
+
+
+
     }}

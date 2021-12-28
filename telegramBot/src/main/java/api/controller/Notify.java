@@ -9,9 +9,12 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import utils.user.UserService;
+import utils.user.UserSettings;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ConcurrentMap;
 
 
 public class Notify extends DefaultAbsSender {
@@ -42,6 +45,12 @@ public class Notify extends DefaultAbsSender {
         @SneakyThrows
         @Override
         public void run() {
+            ConcurrentMap<Long, UserSettings> userMap;
+            UserService userService = new UserService();
+            userMap= userService.getUserMap();
+            System.out.println(userMap.toString());
+
+
             System.out.println("timer2");
 
             Notify everyTwoHours = new Notify(new DefaultBotOptions());
