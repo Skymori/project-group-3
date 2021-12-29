@@ -1,118 +1,97 @@
 package api.controller;
+
 import lombok.SneakyThrows;
 import org.telegram.telegrambots.bots.DefaultAbsSender;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
-import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import utils.user.UserService;
 import utils.user.UserSettings;
 
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.ConcurrentMap;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.time.LocalTime;
+import java.util.*;
 
 
 public class Notify extends DefaultAbsSender {
-    public Notify (DefaultBotOptions options){
+    public Notify(DefaultBotOptions options) {
         super(options);
     }
+
     @Override
     public String getBotToken() {
-        return "5091935773:AAFZ-XHxAVtXqf0wBleCkSyEYlThrqBII08";
-    }
+        String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
+        String appConfigPath = rootPath + "r.properties";
+        Properties appProps = new Properties();
 
+        try {
+            appProps.load(new FileInputStream(appConfigPath));
+
+            return appProps.getProperty("bot.token");
+        } catch (FileNotFoundException e) {
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        return "is not find";
+    }
 
 
     private Timer mTimer = new Timer();
     private MyTimerTask mMyTimerTask = new MyTimerTask();
 
-    public void startTimer(){
+    public void startTimer() {
         // 1000 - время в мс, через которое будет запущена задача
-        mTimer.schedule(mMyTimerTask, 18000,18000);
+        mTimer.schedule(mMyTimerTask, 60000, 60000);
     }
 
     class MyTimerTask extends TimerTask {
 
-
-        public String sendInfo(UserSettings userSettings) throws IOException, InterruptedException {
-            Facade facade = new Facade();
-
-            final HashSet<Banks> bankList = userSettings.getBankList();
-            System.out.println(bankList.toString());
-
-            final HashSet<CurrencyNames> currencies = userSettings.getCurrencies();
-            System.out.println(currencies.toString());
-
-
-            StringBuilder result = new StringBuilder();
-
-            for (Banks banks : bankList) {
-                List<BankResponce> bankInfo = facade.getBankInfo(banks.getName());
-                result.append("Курс в: " + banks.getCommand() + "\n");
-
-                for (CurrencyNames currency : currencies) {
-                    List<BankResponce> collect = bankInfo.stream()
-                            .filter(cur -> currency.getCommand().equals(cur.getCurrency()))
-                            .collect(Collectors.toList());
-
-
-                    for (BankResponce responce : collect) {
-                        result.append(responce.getCurrency() + " Покупка: " + responce.getBuy() + " Продажа:" + responce.getSale() + "\n");
-                    }
-                    System.out.println(collect);
-                }
-
-            }
-
-            return result.toString();
-        }
-
-//        String toPost (String message);{
-//            Cha
-//        }
-
         @SneakyThrows
         @Override
         public void run() {
-            ConcurrentMap<Long, UserSettings> userMap;
+
+            Map<Long, UserSettings> userMap;
             UserService userService = new UserService();
-            userMap= userService.getUserMap();
-            System.out.println(userMap.toString());
-/////////////////////////
+            userMap = userService.getUserMap();
 
-            try {
-                execute(SendMessage.builder()
-                        .text(userService.sendInfo(userService.getUserSettings(userId)))
-                        .chatId(userId.toString())
-                        .build());
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            TelegramImplementations telegramImplementations = new TelegramImplementations();
+
+            LocalTime timeNow = LocalTime.now();
+            int hourNow = timeNow.getHour();
+            int minuteNow = timeNow.getMinute();
+            int notifyUserHour;
+
+            UserSettings us;
+            Iterator iterator = userMap.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry pair = (Map.Entry) iterator.next();
+                us = (UserSettings) pair.getValue();
+                notifyUserHour = us.getNotifyHour();
+
+                if (minuteNow == 0 && notifyUserHour == hourNow) {
+                    try {
+
+                        execute(SendMessage.builder()
+                                .text(telegramImplementations.sendInfo(us))
+                                .chatId(pair.getKey().toString())
+                                .build());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+
             }
-
-            ///////////////////////
-
-            System.out.println("timer2");
-
-            Notify everyTwoHours = new Notify(new DefaultBotOptions());
-            everyTwoHours.execute(SendMessage.builder().chatId("765380855").text("ДУУЖЕ Цікаве.." +
-                    "" +
-                    " \n \t нагадування з буквою і ІЇ").build());
 
         }
     }
-
-
-
-
-
-
 
 
 }
