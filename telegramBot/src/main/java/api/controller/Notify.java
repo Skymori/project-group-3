@@ -44,8 +44,8 @@ public class Notify extends DefaultAbsSender {
     private MyTimerTask mMyTimerTask = new MyTimerTask();
 
     public void startTimer() {
-        // 1000 - время в мс, через которое будет запущена задача
-        mTimer.schedule(mMyTimerTask, 60000, 60000);
+        // 1000 - время в мс, через которое    будет запущена задача
+        mTimer.schedule(mMyTimerTask, 59000, 60000);
     }
 
     class MyTimerTask extends TimerTask {
